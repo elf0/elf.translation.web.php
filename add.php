@@ -2,73 +2,70 @@
 //License: Public Domain
 //Author: elf
 //EMail: elf198012@gmail.com
-if(!isset($_POST['s']) or !isset($_POST['d']) or !isset($_POST['st']) or !isset($_POST['dt']))
+if(!isset($_POST['l0']) or !isset($_POST['l1']) or !isset($_POST['t0']) or !isset($_POST['t1']))
  die('<p>Error: Invalid request!</p>');
 
-$sourceText = $_POST['st'];
-$stn = strlen($sourceText);
-if($stn > 255 or $stn == 0 or strpos($sourceText, '"', 0))
+$text0 = $_POST['t0'];
+$t0n = strlen($text0);
+if($t0n > 255 or $t0n == 0 or strpos($text0, '"', 0))
  die('<p>Error: Invalid request!</p>');
 
-$destinationText = $_POST['dt'];
-$dtn = strlen($destinationText);
-if($dtn > 255 or $dtn == 0 or strpos($destinationText, '"', 0))
+$text1 = $_POST['t1'];
+$t1n = strlen($text1);
+if($t1n > 255 or $t1n == 0 or strpos($text1, '"', 0))
  die('<p>Error: Invalid request!</p>');
 
 require 'languages.php';
 
 $ln = count($languages);
 
-$sourceLanguage = $_POST['s'];
-$si = array_search($sourceLanguage, $languages);
-if($si === false)
+$language0 = $_POST['l0'];
+$i0 = array_search($language0, $languages);
+if($i0 === false)
  die('<p>Error: Invalid request!</p>');
 
-$destinationLanguage = $_POST['d'];
+$language1 = $_POST['l1'];
 
-$di = array_search($destinationLanguage, $languages);
-if($di === false)
+$i1 = array_search($language1, $languages);
+if($i1 === false)
  die('<p>Error: Invalid request!</p>');
 
-if($si == $di)
+if($i0 == $i1)
  die('<p>Error: Invalid request!</p>');
 
-if($si > $di){
- $language_pair = $destinationLanguage . '_' . $sourceLanguage;
+if($i0 > $i1){
+ $language_pair = $language1 . '_' . $language0;
 }
 else{
- $language_pair = $sourceLanguage . '_' . $destinationLanguage;
+ $language_pair = $language0 . '_' . $language1;
 }
 
-$table = 't_' . $language_pair;
-
-//die('<tr><td>' . $sourceLanguage . '(' . $sourceText . ')' . $destinationLanguage . '(' . $destinationText . ')'. '</td></tr>');
 require 'AddText.php';
 
-function AddTranslation($db_path, $table, $sourceLanguage, $sourceText, $destinationLanguage, $destinationText){
- //die('<tr><td>' . $sourceLanguage . '(' . $sourceText . ')' . $destinationLanguage . '(' . $destinationText . ')'. '</td></tr>');
- if($sourceLanguage == 'english')
-  $sourceText = strtolower($sourceText);
+function AddTranslation($db_path, $language_pair, $language0, $text0, $language1, $text1){
+ //die('<tr><td>' . $language0 . '(' . $text0 . ')' . $language1 . '(' . $text1 . ')'. '</td></tr>');
+ if($language0 == 'english')
+  $text0 = strtolower($text0);
 
- if($destinationLanguage == 'english')
-  $destinationText = strtolower($destinationText);
+ if($language1 == 'english')
+  $text1 = strtolower($text1);
 
- $sid = InsertText($db_path . $sourceLanguage . '.db', $sourceText);
- if($sid <= 0)
-  return -$sid;
+ $id0 = InsertText($db_path . $language0 . '.db', $text0);
+ if($id0 <= 0)
+  return -$id0;
 
- $did = InsertText($db_path . $destinationLanguage . '.db', $destinationText);
- if($did <= 0)
-  return -$did;
+ $id1 = InsertText($db_path . $language1 . '.db', $text1);
+ if($id1 <= 0)
+  return -$id1;
 
  try{
-  $db = new SQLite3($db_path . 'translation.db', SQLITE3_OPEN_READWRITE);
+  $db = new SQLite3($db_path . $language_pair . '.db', SQLITE3_OPEN_READWRITE);
  }
  catch(Exception $e){
   return 1;
  }
 
- $sql = 'Insert or ignore into ' . $table . '(f_' . $sourceLanguage . '_id, f_' . $destinationLanguage . '_id) values(' . $sid . ', ' . $did . ')';
+ $sql = 'Insert or ignore into t_translation(f_language0_id, f_language1_id) values(' . $id0 . ', ' . $id1 . ')';
  //die($sql);
  $bResult = $db->exec($sql);
  $db->close();
@@ -78,7 +75,7 @@ function AddTranslation($db_path, $table, $sourceLanguage, $sourceText, $destina
 require 'config.php';
 
 
-$result = AddTranslation($db_path, $table, $sourceLanguage, $sourceText, $destinationLanguage, $destinationText);
+$result = AddTranslation($db_path, $language_pair, $language0, $text0, $language1, $text1);
 if($result > 0)
  die('<p>Error: ' . $result . '</p>');
 else

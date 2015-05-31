@@ -4,12 +4,12 @@
 //EMail: elf198012@gmail.com
 //error_reporting(E_ALL);
 //ini_set('display_errors', true);
-if(!isset($_POST['s']) or !isset($_POST['d']) or !isset($_POST['t']))
+if(!isset($_POST['l0']) or !isset($_POST['l1']) or !isset($_POST['t0']))
  die('<p>Error: Invalid request!</p>');
 
-$sourceText = $_POST['t'];
-$tn = strlen($sourceText);
-if($tn > 255 or $tn == 0 or strpos($sourceText, '"', 0))
+$text0 = $_POST['t0'];
+$tn = strlen($text0);
+if($tn > 255 or $tn == 0 or strpos($text0, '"', 0))
  die('<p>Error: Invalid request!</p>');
 
 
@@ -17,14 +17,14 @@ require 'languages.php';
 
 $ln = count($languages);
 
-$sourceLanguage = $_POST['s'];
-$si = array_search($sourceLanguage, $languages);
+$language0 = $_POST['l0'];
+$si = array_search($language0, $languages);
 if($si === false)
  die('<p>Error: Invalid request!</p>');
 
-$destinationLanguage = $_POST['d'];
+$language1 = $_POST['l1'];
 
-$di = array_search($destinationLanguage, $languages);
+$di = array_search($language1, $languages);
 if($di === false)
  die('<p>Error: Invalid request!</p>');
 
@@ -32,10 +32,10 @@ if($si == $di)
  die('<p>Error: Invalid request!</p>');
 
 if($si > $di){
- $language_pair = $destinationLanguage . '_' . $sourceLanguage;
+ $language_pair = $language1 . '_' . $language0;
 }
 else{
- $language_pair = $sourceLanguage . '_' . $destinationLanguage;
+ $language_pair = $language0 . '_' . $language1;
 }
 
 $table = 't_' . $language_pair;
@@ -44,28 +44,25 @@ require 'config.php';
 
 require 'AddText.php';
 
-if($sourceLanguage == 'english')
- $sourceText = strtolower($sourceText);
+if($language0 == 'english')
+ $text0 = strtolower($text0);
 
-$sid = InsertText($db_path . $sourceLanguage . '.db', $sourceText);
+$sid = InsertText($db_path . $language0 . '.db', $text0);
 if($sid <= 0)
  die('<p>Error: ' . -$sid . '</p>');
 
 try{
- $db_translation = new SQLite3($db_path . 'translation.db', SQLITE3_OPEN_READONLY);
+ $db_translation = new SQLite3($db_path . $language_pair. '.db', SQLITE3_OPEN_READONLY);
 }
 catch(Exception $e){
   die('Error: 1');
 }
 
-$field = 'f_' . $sourceLanguage . '_id';
-$sql = 'Select ' . 'f_' . $destinationLanguage . '_id, f_good, f_bad' . ' from ' . $table . ' where f_' . $sourceLanguage . '_id = ' . $sid;
+$sql = 'Select f_language1_id, f_good, f_bad from t_translation where f_language0_id = ' . $sid;
 $ids = $db_translation->query($sql);
 
-//echo '<tr><td>' . $table . '</td><td>' . $sql . '</td></tr>' . "\n";
-
 try{
-  $db_destination = new SQLite3($db_path . $destinationLanguage . '.db', SQLITE3_OPEN_READONLY);
+  $db_destination = new SQLite3($db_path . $language1 . '.db', SQLITE3_OPEN_READONLY);
 }
 catch(Exception $e){
  $db_translation->close();

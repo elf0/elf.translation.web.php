@@ -5,8 +5,8 @@ function AddTranslation(){
  //alert($("#inputAddTranslation").val());
 
  var form = $("#formTranslation");
- $.post("/translation/add.php", {s: form.children("select[name='s']").val(), st: form.children("input[id='inputSource']").val(),
-  d: form.children("select[name='d']").val(), dt: $("#inputAddTranslation").val()},
+ $.post("/translation/add.php", {l0: form.children("select[name='s']").val(), t0: form.children("input[id='inputSource']").val(),
+  l1: form.children("select[name='d']").val(), t1: $("#inputAddTranslation").val()},
   function(data,status){
    $("#tableBody").html(data);
    $("#inputAddTranslation").val("");
@@ -48,7 +48,7 @@ $(document).ready(function(){
 
 //alert(form.children("select[name='s']").val() + " to " + form.children("select[name='d']").val() + ": " + form.children("input[id='inputSource']").val());
 
-    $.post("/translation/translate.php", {s: form.children("select[name='s']").val(), d: form.children("select[name='d']").val(), t: form.children("input[id='inputSource']").val()},
+    $.post("/translation/translate.php", {l0: form.children("select[name='s']").val(), l1: form.children("select[name='d']").val(), t0: form.children("input[id='inputSource']").val()},
       function(data,status){
        $("#tableBody").html(data);
     }).fail(function(xhr, statusText, errorThrown){

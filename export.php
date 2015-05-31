@@ -2,63 +2,50 @@
 ignore_user_abort(true);
 set_time_limit(0);
 
+$export_date = date('Ymd');
+
 require 'config.php';
 
 $lockFilePathName = $db_path . 'export.lock';
-$lock = fopen($lockFilePathName, 'x');
-if($lock === false)
-  die('Export...');
-fclose($lock);
+
+$fLock = fopen($lockFilePathName, 'c+b');
+if($fLock === false)
+ die('Error: 1');
+
+if(!flock($fLock, LOCK_EX)){
+ fclose($fLock);
+ die('Error: 2');
+}
+
+$last_export_date = fread($fLock, 8);
+
+if($last_export_date !== false and strlen($last_export_date) == 8){
+ $datetime0 = date_create_from_format('Ymd', $last_export_date);
+ $datetime1 = date_create_from_format('Ymd', $export_date);
+
+ $interval = date_diff($datetime0, $datetime1);
+ if($interval->days < 7){
+  flock($fLock, LOCK_UN);
+  fclose($fLock);
+  die('Wait '. (7 - $interval->days) . ' days, then export again!');
+ }
+}
+
+fwrite($fLock, $export_date);
+flock($fLock, LOCK_UN);
+fclose($fLock);
 
 echo 'Wait, please!<br /> Maybe a long time...<br />';
 
-//sleep(60);
+sleep(60);
 
-function ExportLanguage($db_path, $db_file_name, $export_path,$export_date){
+function ExportLanguage($db_path, $db_file_name, $export_path, $export_date){
  try{
   $db = new SQLite3($db_path . $db_file_name, SQLITE3_OPEN_READONLY);
  }
  catch(Exception $e){
   return 1;
  }
-/*
-$lastExportDate = $db->querySingle('Select f_value from t_key_value where f_key = "last_export_date"');
-if($lastExportDate === false){
-  $db->close();
-  unlink(lockFile);
-  die('Error: 1');
-}
-
-
-
-if($lastExportDate === null){
-  if(!$db->exec('Insert into t_key_value(f_key, f_value) values("last_export_date", "' . $exportDate . '")')){
-    $db->close();
-    unlink(lockFile);
-    die('2');
-  }
-}
-else{
-  echo 'Last export: ' . $lastExportDate . '<br />';
-  $datetime0 = date_create_from_format('Ymd', $lastExportDate);
-  $datetime1 = date_create_from_format('Ymd', $exportDate);
-
-  $interval = date_diff($datetime0, $datetime1);
-  if($interval->days < 7){
-    $db->close();
-    unlink(lockFile);
-    die('Wait '. (7 - $interval->days) . ' days, then export again!');
-  }
-
-  if(!$db->exec('Update t_key_value set f_value = "' . $exportDate . '" where f_key = "last_export_date"')){
-    $db->close();
-    unlink(lockFile);
-    die('2');
-  }
-}
-
-$db->close();
-*/
 
  $PathNamePrefix = $export_path . $db_file_name . '-' . $export_date . '-';
 
@@ -140,9 +127,7 @@ function ExportTranslation($db_path, $db_file_name, $export_path, $export_date){
  return 0;
 }
 
-function Export($db_path, $export_path, $languages){
- $export_date = date('Ymd');
-
+function Export($db_path, $export_path, $languages, $export_date){
  $language_count = count($languages);
  $end = $language_count - 1;
  $begin = 0;
@@ -168,12 +153,12 @@ function Export($db_path, $export_path, $languages){
 
 require 'languages.php';
 
-$result = Export($db_path, $export_path, $languages);
-unlink($lockFilePathName);
+$result = Export($db_path, $export_path, $languages, $export_date);
 
 if($result != 0)
  echo 'Error: ' . $result;
 else
  echo 'Finished!';
 
+//unlink($lockFilePathName);
 ?> 

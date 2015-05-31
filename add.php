@@ -44,11 +44,9 @@ require 'AddText.php';
 
 function AddTranslation($db_path, $language_pair, $language0, $text0, $language1, $text1){
  //die('<tr><td>' . $language0 . '(' . $text0 . ')' . $language1 . '(' . $text1 . ')'. '</td></tr>');
- if($language0 == 'english')
-  $text0 = strtolower($text0);
+ $text0 = strtolower($text0);
 
- if($language1 == 'english')
-  $text1 = strtolower($text1);
+ $text1 = strtolower($text1);
 
  $id0 = InsertText($db_path . $language0 . '.db', $text0);
  if($id0 <= 0)

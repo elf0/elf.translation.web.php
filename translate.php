@@ -44,8 +44,7 @@ require 'config.php';
 
 require 'AddText.php';
 
-if($language0 == 'english')
- $text0 = strtolower($text0);
+$text0 = strtolower($text0);
 
 $sid = InsertText($db_path . $language0 . '.db', $text0);
 if($sid <= 0)

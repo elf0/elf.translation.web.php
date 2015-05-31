@@ -3,4 +3,5 @@
 //Author: elf
 //EMail: elf198012@gmail.com
 $db_path = '../db/';
+$export_path = '../download/';
 ?>

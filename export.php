@@ -37,7 +37,7 @@ fclose($fLock);
 
 echo 'Wait, please!<br /> Maybe a long time...<br />';
 
-sleep(60);
+//sleep(60);
 
 function ExportLanguage($db_path, $db_file_name, $export_path, $export_date){
  try{

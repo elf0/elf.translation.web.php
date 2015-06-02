@@ -61,7 +61,7 @@ $sql = 'Select f_language1_id, f_good, f_bad from t_translation where f_language
 $ids = $db_translation->query($sql);
 
 try{
-  $db_destination = new SQLite3($db_path . $language1 . '.db', SQLITE3_OPEN_READONLY);
+  $db1 = new SQLite3($db_path . $language1 . '.db', SQLITE3_OPEN_READONLY);
 }
 catch(Exception $e){
  $db_translation->close();
@@ -70,17 +70,17 @@ catch(Exception $e){
 
 
 while($row = $ids->fetchArray(SQLITE3_NUM)){
- $destinationText = $db_destination->querySingle('Select f_text from t_text where f_id = ' . $row[0]);
- if($destinationText === NULL){
+ $text1 = $db1->querySingle('Select f_text from t_text where f_id = ' . $row[0]);
+ if($text1 === NULL){
   $db_translation->close();
-  $db_destination->close();
+  $db1->close();
   die('Error: 2');
  }
- echo '<tr><td>' . $destinationText . '</td><td>' . $row[1] . '</td><td>' . $row[2] . '</td></tr>' . "\n";
+ echo '<tr><td>' . $text1 . '</td><td><a class="good" href="#">' . $row[1] . '</a></td><td><a class="bad" href="#">' . $row[2] . '</a></td></tr>' . "\n";
 }
 //  echo '<p>Not found!</p>';
 
 
 $db_translation->close();
-$db_destination->close();
+$db1->close();
 ?>

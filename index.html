@@ -20,42 +20,43 @@
       </nav>
     </header>
 
+    <p>Edit freely! Share freely!</p>
     <form id="formTranslation">
       <input type="submit" value="Translate"/>
-      <select id="selectSource" name="s" onchange="Select_onSourceChange()">
-        <option value="arabic">Arabic(العربية)</option>
-        <option value="chinese">Chinese(中文)</option>
-        <option value="english" selected="selected">English</option>
-        <option value="french">French(Français)</option>
-        <option value="german">German(Deutsch)</option>
-        <option value="greek">Greek(Ελληνικά)</option>
-        <option value="italian">Italian(Italiano)</option>
-        <option value="japanese">Japanese(日本語)</option>
-        <option value="korean">Korean(한국어)</option>
-        <option value="portuguese">Portuguese(Português)</option>
-        <option value="russian">Russian(Русский)</option>
-        <option value="spanish">Spanish(Español)</option>
-        <option value="thai">Thai(ไทย)</option>
-        <option value="vietnamese">Vietnamese(Tiếng Việt)</option>
+      <select id="selectSource" name="l0" onchange="Select_onL0Change()">
+        <option value="0">Arabic(العربية)</option>
+        <option value="1">Chinese(中文)</option>
+        <option value="2" selected="selected">English</option>
+        <option value="3">French(Français)</option>
+        <option value="4">German(Deutsch)</option>
+        <option value="5">Greek(Ελληνικά)</option>
+        <option value="6">Italian(Italiano)</option>
+        <option value="7">Japanese(日本語)</option>
+        <option value="8">Korean(한국어)</option>
+        <option value="9">Portuguese(Português)</option>
+        <option value="10">Russian(Русский)</option>
+        <option value="11">Spanish(Español)</option>
+        <option value="12">Thai(ไทย)</option>
+        <option value="13">Vietnamese(Tiếng Việt)</option>
       </select>
-      <input id="inputSource" type="text" style="width:512px" placeholder="Input original text!"/>
+      <input id="inputL0" type="text" style="width:512px" placeholder="Input original text!"/>
       <br />
       <span>to</span>
-      <select name="d" onchange="Select_onDestinationChange()">
-        <option value="arabic">Arabic(العربية)</option>
-        <option value="chinese">Chinese(中文)</option>
-        <option value="english">English</option>
-        <option value="french">French(Français)</option>
-        <option value="german">German(Deutsch)</option>
-        <option value="greek">Greek(Ελληνικά)</option>
-        <option value="italian">Italian(Italiano)</option>
-        <option value="japanese">Japanese(日本語)</option>
-        <option value="korean">Korean(한국어)</option>
-        <option value="portuguese">Portuguese(Português)</option>
-        <option value="russian">Russian(Русский)</option>
-        <option value="spanish">Spanish(Español)</option>
-        <option value="thai">Thai(ไทย)</option>
-        <option value="vietnamese">Vietnamese(Tiếng Việt)</option>
+      <select name="l1" onchange="Select_onL1Change()">
+        <option value="0">Arabic(العربية)</option>
+        <option value="1">Chinese(中文)</option>
+        <option value="2">English</option>
+        <option value="3">French(Français)</option>
+        <option value="4">German(Deutsch)</option>
+        <option value="5">Greek(Ελληνικά)</option>
+        <option value="6">Italian(Italiano)</option>
+        <option value="7">Japanese(日本語)</option>
+        <option value="8">Korean(한국어)</option>
+        <option value="9">Portuguese(Português)</option>
+        <option value="10">Russian(Русский)</option>
+        <option value="11">Spanish(Español)</option>
+        <option value="12">Thai(ไทย)</option>
+        <option value="13">Vietnamese(Tiếng Việt)</option>
       </select>
       <span>:</span>
     </form>
@@ -65,10 +66,14 @@
      <thead><tr><th>Translation</th><th>Good</th><th>Bad</th></tr></thead>
      <tbody id="tableBody">
      </tbody>
-     <tfoot><tr><td><input id="inputAddTranslation" type="text" placeholder="Add translation!"/></td><td><button id="AddTranslation" onclick="AddTranslation()">+</button></td><td>0</td></tr></tfoot>
+     <tfoot><tr><td><input id="inputL1" type="text" placeholder="Add translation!"/></td><td><button id="AddTranslation" onclick="AddTranslation()">+</button></td><td>0</td></tr></tfoot>
     </table>
    
     <footer>
+      All data you edit will be published into the Public Domain!
+      <br />
+      Anyone is free to <a href="/download/">download</a>, copy, modify, publish, sell, or
+distribute!
     </footer>
   </body>
 </html>

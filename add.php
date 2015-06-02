@@ -3,37 +3,37 @@
 //Author: elf
 //EMail: elf198012@gmail.com
 if(!isset($_POST['l0']) or !isset($_POST['l1']) or !isset($_POST['t0']) or !isset($_POST['t1']))
- die('<p>Error: Invalid request!</p>');
-
-$text0 = $_POST['t0'];
-$t0n = strlen($text0);
-if($t0n > 255 or $t0n == 0 or strpos($text0, '"', 0))
- die('<p>Error: Invalid request!</p>');
-
-$text1 = $_POST['t1'];
-$t1n = strlen($text1);
-if($t1n > 255 or $t1n == 0 or strpos($text1, '"', 0))
- die('<p>Error: Invalid request!</p>');
+ die('<p>Error: 1</p>');
 
 require 'languages.php';
 
 $ln = count($languages);
 
-$language0 = $_POST['l0'];
-$i0 = array_search($language0, $languages);
-if($i0 === false)
- die('<p>Error: Invalid request!</p>');
+$l0 = $_POST['l0'];
+if($l0 >= $ln)
+ die('<p>Error: 1</p>');
 
-$language1 = $_POST['l1'];
+$l1 = $_POST['l1'];
+if($l1 >= $ln)
+ die('<p>Error: 1</p>');
 
-$i1 = array_search($language1, $languages);
-if($i1 === false)
- die('<p>Error: Invalid request!</p>');
+if($l0 == $l1)
+ die('<p>Error: 1</p>');
 
-if($i0 == $i1)
- die('<p>Error: Invalid request!</p>');
+$text0 = $_POST['t0'];
+$t0n = strlen($text0);
+if($t0n > 255 or $t0n == 0 or strpos($text0, '"', 0))
+ die('<p>Error: 1</p>');
 
-if($i0 > $i1){
+$text1 = $_POST['t1'];
+$t1n = strlen($text1);
+if($t1n > 255 or $t1n == 0 or strpos($text1, '"', 0))
+ die('<p>Error: 1</p>');
+
+$language0 = $languages[$l0];
+$language1 = $languages[$l1];
+
+if($l0 > $l1){
  $language_pair = $language1 . '_' . $language0;
 }
 else{

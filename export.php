@@ -59,9 +59,9 @@ function ExportLanguage($db_path, $db_file_name, $export_path, $export_date){
  $rowCount = 0;
  $fileNumber = 1;
 //Fixme: $result could be 'true', 'false' or 'SQLite3Result'
- $result = $db->query('Select f_text, f_good, f_bad from t_text order by f_good desc');
+ $result = $db->query('Select f_id, f_text, f_good, f_bad from t_text order by f_good desc');
  while($row = $result->fetchArray(SQLITE3_NUM)){
-  if(bzwrite($fOutput, $row[0] . '"' . $row[1] . '"' . $row[2] . "\n") === false){
+  if(bzwrite($fOutput, $row[0] . '"' . $row[1] . '"' . $row[2] . '"' . $row[3] . "\n") === false){
     bzclose($fOutput);
     $db->close();
     return 3;

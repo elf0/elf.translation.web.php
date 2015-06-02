@@ -49,7 +49,7 @@ function ExportLanguage($db_path, $db_file_name, $export_path, $export_date){
 
  $PathNamePrefix = $export_path . $db_file_name . '-' . $export_date . '-';
 
- $fOutput = bzopen($PathNamePrefix . '1.bz2', 'w');
+ $fOutput = bzopen($PathNamePrefix . '1.txt.bz2', 'w');
  if($fOutput === false){
   $db->close();
   return 2;
@@ -70,7 +70,7 @@ function ExportLanguage($db_path, $db_file_name, $export_path, $export_date){
   if(++$rowCount === 16777216){
    $rowCount = 0;
    bzclose($fOutput);
-   $fOutput = bzopen($PathNamePrefix. ++$fileNumber . '.bz2', 'w');
+   $fOutput = bzopen($PathNamePrefix. ++$fileNumber . '.txt.bz2', 'w');
    if($fOutput === false){
     $db->close();
     return 2;
@@ -93,7 +93,7 @@ function ExportTranslation($db_path, $db_file_name, $export_path, $export_date){
 
  $PathNamePrefix = $export_path . $db_file_name . '-' . $export_date . '-';
 
- $fOutput = bzopen($PathNamePrefix . '1.bz2', 'w');
+ $fOutput = bzopen($PathNamePrefix . '1.txt.bz2', 'w');
  if($fOutput === false){
   $db->close();
   return 2;
@@ -114,7 +114,7 @@ function ExportTranslation($db_path, $db_file_name, $export_path, $export_date){
   if(++$rowCount === 16777216){
    $rowCount = 0;
    bzclose($fOutput);
-   $fOutput = bzopen($PathNamePrefix. ++$fileNumber . '.bz2', 'w');
+   $fOutput = bzopen($PathNamePrefix. ++$fileNumber . '.txt.bz2', 'w');
    if($fOutput === false){
     $db->close();
     return 2;

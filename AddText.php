@@ -12,6 +12,7 @@ function InsertText($db_path_name, $text){
 
  $id = $db->querySingle('Select f_id from t_text where f_text = "' . $text . '"');
  if($id !== NULL){
+  $db->exec('Update t_text set f_good = f_good + 1 where f_id = ' . $id);
   $db->close();
   return $id;
  }

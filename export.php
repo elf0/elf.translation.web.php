@@ -105,7 +105,7 @@ function ExportTranslation($db_path, $db_file_name, $export_path, $export_date){
 //Fixme: $result could be 'true', 'false' or 'SQLite3Result'
  $result = $db->query('Select f_language0_id, f_language1_id, f_good, f_bad from t_translation order by f_good desc');
  while($row = $result->fetchArray(SQLITE3_NUM)){
-  if(bzwrite($fOutput, $row[0] . ',' . $row[1] . ',' . $row[2] . ',' . $row[3] . "\n") === false){
+  if(bzwrite($fOutput, $row[0] . '"' . $row[1] . '"' . $row[2] . '"' . $row[3] . "\n") === false){
     bzclose($fOutput);
     $db->close();
     return 3;
